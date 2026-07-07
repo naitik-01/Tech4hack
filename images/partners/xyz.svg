@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="100" height="100">
+  <defs>
+    <linearGradient id="xyzGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#ff007f" />
+      <stop offset="100%" stop-color="#7928ca" />
+    </linearGradient>
+  </defs>
+  <path fill="url(#xyzGrad)" d="M12 1L2 6v12l10 5 10-5V6L12 1zm0 2.2l7.7 3.8-7.7 3.8-7.7-3.8L12 3.2zM4 8.5l7 3.5v7.7l-7-3.5V8.5zm9 11.2v-7.7l7-3.5v7.7l-7 3.5z"/>
+</svg>

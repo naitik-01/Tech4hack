@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="100" height="100">
+  <defs>
+    <linearGradient id="afGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#f857a6" />
+      <stop offset="100%" stop-color="#ff5858" />
+    </linearGradient>
+  </defs>
+  <path fill="url(#afGrad)" d="M18.5 6C16.3 6 14.4 7.2 13.5 9c-.9-1.8-2.8-3-4.9-3C5.5 6 3 8.5 3 11.5S5.5 17 8.6 17c2.1 0 4-1.2 4.9-3 .9 1.8 2.8 3 4.9 3 3.1 0 5.6-2.5 5.6-5.5S21.6 6 18.5 6zm-9.9 9c-1.9 0-3.4-1.6-3.4-3.5S6.7 8 8.6 8s3.4 1.6 3.4 3.5-1.5 3.5-3.4 3.5zm9.9 0c-1.9 0-3.4-1.6-3.4-3.5S16.6 8 18.5 8s3.4 1.6 3.4 3.5-1.5 3.5-3.4 3.5z"/>
+</svg>
