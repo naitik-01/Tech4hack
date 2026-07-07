@@ -1,0 +1,1360 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gallery – Tech4Hack</title>
+  <link rel="icon" type="image/x-icon" href="images/favicon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link
+    href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;0,700;1,400&display=swap"
+    rel="stylesheet">
+  <style>
+    *,
+    *::before,
+    *::after {
+      box-sizing: border-box;
+      /*margin: 0;*/
+      padding: auto;
+      outline: none;
+    }
+
+    :root {
+      --bg: #070510;
+      --surface: #0e0b1d;
+      --surface-card: #15112c;
+      --border: rgba(121, 22, 205, 0.15);
+      --border-light: rgba(255, 255, 255, 0.08);
+      --purple: #d926b5;
+      --purple-dim: #7916cd;
+      --blue-brand: #1e12b8;
+      --accent-gradient: linear-gradient(135deg, #c084fc, #8b22e2, #1e12b8);
+      --white: #f5f3ff;
+      --muted: #9490a8;
+      --btn-bg: #8b22e2;
+      --btn-hover: #b61cd4;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--white);
+      font-family: 'DM Sans', sans-serif;
+      min-height: 100vh;
+      overflow-x: hidden;
+      line-height: 1.6;
+    }
+
+    /* ── SCROLLBAR ── */
+    ::-webkit-scrollbar {
+      width: 10px;
+    }
+    ::-webkit-scrollbar-track {
+      background: var(--bg);
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #251e3e;
+      border-radius: 5px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: var(--purple-dim);
+    }
+
+    /* ── UTILITIES & SHARED STYLES ── */
+    .section-padding {
+      padding: 120px 48px 80px;
+      position: relative;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      width: 100%;
+    }
+
+    .section-header {
+      text-align: center;
+      max-width: 700px;
+      margin: 0 auto 50px;
+    }
+
+    .section-title {
+      font-family: 'Sora', sans-serif;
+      font-size: clamp(32px, 5vw, 44px);
+      font-weight: 800;
+      line-height: 1.2;
+      margin-bottom: 16px;
+      letter-spacing: -0.02em;
+    }
+
+    .section-title span {
+      background: linear-gradient(to bottom, #c084fc, #d926b5, #7916cd, #1e12b8, #6366f1, #d926b5, #c084fc);
+      background-attachment: fixed;
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .section-subtitle {
+      font-size: 16px;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    .gradient-border-card {
+      background: var(--surface-card);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      position: relative;
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .gradient-border-card::after {
+      content: '';
+      position: absolute;
+      inset: -1px;
+      border-radius: 16px;
+      background: linear-gradient(135deg, rgba(139, 34, 226, 0.4), transparent, rgba(217, 38, 181, 0.4));
+      z-index: -1;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .gradient-border-card:hover {
+      transform: translateY(-4px);
+      border-color: rgba(217, 38, 181, 0.3);
+      box-shadow: 0 10px 30px rgba(121, 22, 205, 0.15);
+    }
+
+    .gradient-border-card:hover::after {
+      opacity: 1;
+    }
+
+    /* ── BUTTONS ── */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 10px 24px;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      font-family: 'DM Sans', sans-serif;
+      transition: all 0.25s ease;
+      text-decoration: none;
+      gap: 8px;
+    }
+
+    .btn-outline {
+      background: rgba(139, 34, 226, 0.05);
+      border: 1px solid rgba(139, 34, 226, 0.3);
+      color: #c084fc;
+    }
+
+    .btn-outline:hover {
+      background: rgba(139, 34, 226, 0.15);
+      border-color: rgba(139, 34, 226, 0.6);
+      transform: translateY(-2px);
+      color: #fff;
+    }
+
+    /* ── FIXED NAV ── */
+    nav {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 48px;
+      height: 66px;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      background: transparent;
+      backdrop-filter: blur(0px);
+      -webkit-backdrop-filter: blur(0px);
+      border-bottom: 1px solid transparent;
+      box-shadow: none;
+      z-index: 1000;
+      transition: background 0.4s cubic-bezier(0.25, 1, 0.5, 1),
+                  backdrop-filter 0.4s cubic-bezier(0.25, 1, 0.5, 1),
+                  border-color 0.4s cubic-bezier(0.25, 1, 0.5, 1),
+                  box-shadow 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+    }
+
+    nav.nav-scrolled {
+      background: rgba(7, 5, 16, 0.65);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border-bottom: 1px solid var(--border-light);
+      box-shadow: 0 4px 30px rgba(0, 0, 0, 0.2);
+    }
+
+    /* ── JOIN US DROPDOWN ── */
+    .join-dropdown-wrapper {
+      position: relative;
+      display: inline-block;
+    }
+
+    .join-dropdown-menu {
+      position: absolute;
+      top: 100%;
+      right: 0;
+      margin-top: 8px;
+      background: rgba(14, 11, 29, 0.95);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 8px;
+      min-width: 160px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), 0 0 20px rgba(121, 22, 205, 0.15);
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(10px);
+      transition: all 0.3s cubic-bezier(0.25, 1, 0.5, 1);
+      z-index: 1100;
+    }
+
+    .join-dropdown-wrapper:hover .join-dropdown-menu,
+    .join-dropdown-menu:hover {
+      opacity: 1;
+      visibility: visible;
+      transform: translateY(0);
+    }
+
+    .join-dropdown-wrapper:hover .btn svg {
+      transform: rotate(180deg);
+    }
+
+    .join-dropdown-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 16px;
+      color: var(--white);
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: 500;
+      border-radius: 8px;
+      transition: all 0.25s ease;
+      text-align: left;
+    }
+
+    .join-dropdown-item:hover {
+      background: rgba(139, 34, 226, 0.18);
+      color: #c084fc;
+      transform: translateX(4px);
+    }
+
+    .join-dropdown-item svg {
+      width: 16px;
+      height: 16px;
+      fill: currentColor;
+    }
+
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-family: 'Sora', sans-serif;
+      font-weight: 800;
+      font-size: 18px;
+      letter-spacing: 0.05em;
+      color: var(--white);
+      text-decoration: none;
+    }
+
+    .logo-icon {
+      height: 38px;
+      width: auto;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 32px;
+      list-style: none;
+    }
+
+    .nav-links a {
+      color: var(--white);
+      text-decoration: none;
+      font-size: 14.5px;
+      font-weight: 500;
+      opacity: 0.8;
+      transition: all 0.2s ease;
+    }
+
+    .nav-links a:hover,
+    .nav-links a.active-nav-link {
+      opacity: 1;
+      color: #c084fc;
+      text-shadow: 0 0 10px rgba(192, 132, 252, 0.4);
+    }
+
+    .scroll-progress-bar {
+      position: fixed;
+      top: 66px;
+      left: 0;
+      height: 3px;
+      background: linear-gradient(90deg, #c084fc, #d926b5, #1e12b8);
+      width: 0%;
+      z-index: 1000;
+      transition: width 0.1s ease-out;
+    }
+
+    .nav-right {
+      display: flex;
+      align-items: center;
+    }
+
+    /* ── GALLERY DEDICATED BODY ── */
+    .gallery-hero-wrapper {
+      position: relative;
+      overflow: hidden;
+      background: var(--bg);
+    }
+
+    /* Network graph canvas */
+    #galleryNetworkCanvas {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .gallery-filter-container {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      margin-bottom: 48px;
+      flex-wrap: wrap;
+      position: relative;
+      z-index: 10;
+    }
+
+    .filter-btn {
+      background: rgba(255, 255, 255, 0.04);
+      border: 1px solid var(--border-light);
+      color: var(--white);
+      padding: 10px 22px;
+      border-radius: 80px;
+      cursor: pointer;
+      font-size: 14.5px;
+      font-weight: 500;
+      font-family: 'DM Sans', sans-serif;
+      transition: all 0.25s ease;
+    }
+
+    .filter-btn:hover,
+    .filter-btn.active {
+      background: var(--purple-dim);
+      border-color: var(--purple);
+      box-shadow: 0 4px 12px rgba(121, 22, 205, 0.3);
+      transform: translateY(-1px);
+    }
+
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(min(100%, 320px), 1fr));
+      gap: 30px;
+      position: relative;
+      z-index: 10;
+    }
+
+    .gallery-item {
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      height: 400px;
+      transition: all 0.4s ease;
+    }
+
+    .gallery-card-visual {
+      height: 250px;
+      position: relative;
+      overflow: hidden;
+      background: #0f0a24;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .gallery-card-glow {
+      position: absolute;
+      width: 200px;
+      height: 200px;
+      background: radial-gradient(circle, rgba(139, 34, 226, 0.3) 0%, transparent 70%);
+      filter: blur(20px);
+      z-index: 1;
+      transition: all 0.4s ease;
+    }
+
+    .gallery-item:hover .gallery-card-glow {
+      transform: scale(1.3);
+      background: radial-gradient(circle, rgba(217, 38, 181, 0.45) 0%, transparent 70%);
+    }
+
+    .gallery-card-placeholder {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(135deg, rgba(21, 17, 44, 0.95), rgba(7, 5, 16, 0.98));
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      z-index: 2;
+      border-bottom: 1px solid var(--border-light);
+    }
+
+    .gallery-card-img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.5s ease;
+    }
+    .gallery-item:hover .gallery-card-img {
+      transform: scale(1.05);
+    }
+
+    .gallery-card-info {
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      flex-grow: 1;
+      background: var(--surface-card);
+    }
+
+    .gallery-card-tag {
+      display: inline-block;
+      align-self: flex-start;
+      background: rgba(139, 34, 226, 0.12);
+      border: 1px solid rgba(139, 34, 226, 0.3);
+      padding: 4px 12px;
+      border-radius: 100px;
+      font-size: 11px;
+      font-weight: 700;
+      color: #c084fc;
+      margin-bottom: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .gallery-card-title {
+      font-family: 'Sora', sans-serif;
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--white);
+      margin-bottom: 8px;
+    }
+
+    .gallery-card-desc {
+      font-size: 13.5px;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+
+    /* ── FOOTER ── */
+    footer {
+      background: #04030a;
+      padding: 60px 48px 40px;
+      border-top: 1px solid var(--border-light);
+      text-align: center;
+      margin-top: 100px;
+    }
+
+    .footer-logo {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      font-family: 'Sora', sans-serif;
+      font-weight: 800;
+      font-size: 20px;
+      color: var(--white);
+      text-decoration: none;
+      margin-bottom: 16px;
+    }
+
+    .footer-desc {
+      font-size: 14.5px;
+      color: var(--muted);
+      max-width: 500px;
+      margin: 0 auto 30px;
+      line-height: 1.6;
+    }
+
+    .footer-socials {
+      display: flex;
+      justify-content: center;
+      gap: 16px;
+      margin-bottom: 30px;
+    }
+
+    .footer-social-link {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 44px;
+      height: 44px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--border-light);
+      color: var(--muted);
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      text-decoration: none;
+    }
+
+    .footer-social-link:hover {
+      background: rgba(139, 34, 226, 0.15);
+      border-color: var(--purple);
+      color: #c084fc;
+      transform: translateY(-3px);
+      box-shadow: 0 5px 15px rgba(121, 22, 205, 0.3);
+    }
+
+    .footer-social-link svg {
+      transition: transform 0.3s ease;
+    }
+
+    .footer-social-link:hover svg {
+      transform: scale(1.1);
+    }
+
+    .footer-divider {
+      width: 100%;
+      height: 1px;
+      background: var(--border-light);
+      margin: 0 auto 24px;
+    }
+
+    .footer-bottom {
+      font-size: 13px;
+      color: #625e7c;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      max-width: 1200px;
+      margin: 0 auto;
+      flex-wrap: wrap;
+      gap: 16px;
+    }
+
+    /* ── LIGHTBOX ── */
+    .lightbox-modal {
+      display: none;
+      position: fixed;
+      z-index: 1000;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      overflow: hidden;
+      background-color: rgba(4, 3, 10, 0.95);
+      backdrop-filter: blur(5px);
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .lightbox-modal.show {
+      display: flex;
+      opacity: 1;
+    }
+
+    .lightbox-content-wrapper {
+      position: relative;
+      max-width: 90%;
+      max-height: 85vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .lightbox-img {
+      max-width: 100%;
+      max-height: 80vh;
+      border-radius: 8px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+      border: 1px solid var(--border-light);
+    }
+
+    .lightbox-caption {
+      margin-top: 15px;
+      font-family: 'Sora', sans-serif;
+      font-size: 18px;
+      color: var(--white);
+      text-align: center;
+      font-weight: 600;
+    }
+
+    .lightbox-close {
+      position: absolute;
+      top: 20px;
+      right: 30px;
+      color: var(--muted);
+      font-size: 40px;
+      font-weight: bold;
+      transition: color 0.3s ease;
+      cursor: pointer;
+      z-index: 1001;
+    }
+
+    .lightbox-close:hover {
+      color: var(--purple);
+    }
+
+    .lightbox-nav {
+      cursor: pointer;
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      width: auto;
+      padding: 16px;
+      color: var(--white);
+      font-weight: bold;
+      font-size: 24px;
+      transition: 0.3s ease;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      user-select: none;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1001;
+    }
+
+    .lightbox-nav:hover {
+      background: rgba(192, 132, 252, 0.3);
+      color: #fff;
+    }
+
+    .lightbox-prev {
+      left: 30px;
+    }
+
+    .lightbox-next {
+      right: 30px;
+    }
+
+    /* ── BURGER MENU ── */
+    .burger-menu {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      cursor: pointer;
+      z-index: 1001;
+      padding: 10px;
+    }
+
+    .burger-menu span {
+      width: 25px;
+      height: 3px;
+      background: var(--white);
+      transition: all 0.3s;
+    }
+
+    /* ── MOBILE RESPONSIVE ── */
+    @media (max-width: 900px) {
+      nav {
+        padding: 0 24px;
+      }
+
+      nav.nav-menu-open {
+        background: rgba(7, 5, 16, 0.65);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        border-bottom: 1px solid var(--border-light);
+        box-shadow: 0 4px 30px rgba(0, 0, 0, 0.2);
+      }
+
+      .burger-menu {
+        display: flex;
+      }
+
+      .nav-links {
+        position: absolute;
+        top: 66px;
+        left: 0;
+        width: 100%;
+        background: rgba(7, 5, 16, 0.95);
+        backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
+        flex-direction: column;
+        padding: 30px 0;
+        gap: 25px;
+        transform: translateY(-150%);
+        transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        border-bottom: 1px solid var(--border-light);
+        z-index: 999;
+        display: flex;
+      }
+
+      .nav-links.active {
+        transform: translateY(0);
+      }
+
+      .nav-links a {
+        font-size: 18px;
+        text-align: center;
+        display: block;
+      }
+
+      .nav-right {
+        display: none;
+      }
+
+      .section-padding {
+        padding: 100px 24px 60px;
+      }
+    }
+
+    @media (max-width: 768px) {
+      .lightbox-nav {
+        font-size: 18px;
+        padding: 10px;
+        background: rgba(4, 3, 10, 0.6);
+        border-color: rgba(255, 255, 255, 0.15);
+      }
+      .lightbox-prev {
+        left: 10px;
+      }
+      .lightbox-next {
+        right: 10px;
+      }
+      .lightbox-close {
+        top: 15px;
+        right: 20px;
+        font-size: 32px;
+      }
+      .lightbox-controls {
+        top: 15px !important;
+        left: 20px !important;
+      }
+      .lightbox-img {
+        max-height: 60vh;
+      }
+      .lightbox-caption {
+        font-size: 15px;
+        margin-top: 10px;
+      }
+      .lightbox-thumbnails {
+        margin-top: 12px;
+      }
+    }
+
+    .navsearch {
+      height: 38px;
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      border-radius: 25px;
+      padding: 18px;
+      color: #fff;
+    }
+
+    .navsearch:hover, .navsearch:focus {
+      background: rgba(255, 255, 255, 0.1);
+      border: 1.5px solid rgba(255, 255, 255, 0.3);
+    }
+
+    /* ── LIGHTBOX EXTRA CONTROLS ── */
+    .lightbox-thumbnails {
+      display: flex;
+      gap: 8px;
+      margin-top: 20px;
+      max-width: 90vw;
+      width: 600px;
+      overflow-x: auto;
+      padding: 10px 0;
+      scrollbar-width: thin;
+      scrollbar-color: var(--purple-dim) transparent;
+      z-index: 1002;
+    }
+    
+    .lightbox-thumbnails::-webkit-scrollbar {
+      height: 4px;
+    }
+    .lightbox-thumbnails::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    .lightbox-thumbnails::-webkit-scrollbar-thumb {
+      background: var(--purple-dim);
+      border-radius: 2px;
+    }
+    
+    .lightbox-thumb {
+      width: 50px;
+      height: 38px;
+      object-fit: cover;
+      border-radius: 4px;
+      opacity: 0.4;
+      cursor: pointer;
+      transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      border: 1.5px solid transparent;
+      flex-shrink: 0;
+    }
+    
+    .lightbox-thumb:hover {
+      opacity: 0.7;
+    }
+    
+    .lightbox-thumb.active {
+      opacity: 1;
+      border-color: var(--purple);
+      transform: scale(1.08);
+      box-shadow: 0 0 10px rgba(217, 38, 181, 0.4);
+    }
+
+    #lightboxPlayPause:hover {
+      background: rgba(139, 34, 226, 0.2) !important;
+      border-color: var(--purple) !important;
+      box-shadow: 0 0 10px rgba(139, 34, 226, 0.3);
+    }
+    
+    #lightboxPlayPause.playing {
+      background: var(--purple-dim) !important;
+      border-color: var(--purple) !important;
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- HERO WRAPPER (cursor glow boundary) -->
+  <div class="gallery-hero-wrapper" id="heroWrapper">
+    <canvas id="galleryNetworkCanvas" aria-hidden="true"></canvas>
+
+    <!-- NAV -->
+    <nav>
+      <a href="index.html" class="nav-logo">
+        <img src="images/favicon.png" alt="logo" class="logo-icon">
+        TECH4HACK
+      </a>
+
+      <ul class="nav-links">
+        <li><a href="index.html">Home</a></li>
+        <li><a href="index.html#about">About</a></li>
+        <li><a href="gallery.html" class="active-nav-link">Gallery</a></li>
+        <li><a href="index.html#events">Events</a></li>
+        <li><a href="index.html#contact">Contact</a></li>
+      </ul>
+
+      <!--<input type="text" class="navsearch"/>-->
+
+      <div class="nav-right">
+        <div class="join-dropdown-wrapper">
+          <a href="https://linktr.ee/tech4hack" target="_blank" rel="noopener" class="btn btn-outline" style="padding: 8px 18px; font-size: 13.5px;">
+            Join Us
+            <svg viewBox="0 0 24 24" width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="margin-left: 2px; transition: transform 0.2s ease;"><polyline points="6 9 12 15 18 9"></polyline></svg>
+          </a>
+          <div class="join-dropdown-menu">
+            <a href="https://api.whatsapp.com/send?phone=449" target="_blank" rel="noopener" class="join-dropdown-item">
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M12.004 2c-5.523 0-10 4.477-10 10 0 1.76.455 3.42 1.253 4.887l-1.332 4.862 4.98-1.306c1.424.776 3.036 1.207 4.75 1.207 5.522 0 10-4.477 10-10s-4.478-10-10-10zm.01 1.75c4.56 0 8.25 3.69 8.25 8.25s-3.69 8.25-8.25 8.25c-1.603 0-3.093-.456-4.364-1.246l-.313-.193-2.946.772.788-2.876-.214-.34c-.87-1.39-1.32-2.99-1.32-4.67 0-4.56 3.69-8.25 8.25-8.25zm-3.61 3.5c-.173.003-.342.062-.486.183-.344.29-.68.796-.68 1.488 0 .973.53 1.94 1.058 2.58.528.64 2.254 3.73 5.438 4.93.91.34 1.543.513 2.06.666.924.27 1.765.235 2.428.136.74-.112 2.257-.923 2.576-1.815.32-.89.32-1.657.224-1.818-.096-.16-.353-.257-.738-.45-.386-.192-2.256-1.11-2.61-1.238-.352-.128-.61-.192-.865.193-.256.385-.992 1.237-1.216 1.493-.224.256-.45.29-.834.097-2.022-1.01-3.522-2.316-4.73-4.407-.193-.385-.02-.594.172-.787.172-.172.385-.45.577-.674.193-.224.257-.385.385-.642.128-.256.064-.482-.032-.674-.096-.193-.865-2.086-1.185-2.857-.31-.745-.63-.64-.866-.65-.175-.008-.363-.008-.545-.008z"/></svg>
+              WhatsApp
+            </a>
+            <a href="https://www.linkedin.com/company/tech4hack" target="_blank" rel="noopener" class="join-dropdown-item">
+              <svg viewBox="0 0 24 24" width="16" height="16" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 0 1-2.063-2.065 2.064 2.064 0 1 1 2.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+              LinkedIn
+            </a>
+          </div>
+        </div>
+      </div>
+      <div class="burger-menu" id="burgerMenu">
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+    </nav>
+    <div id="scrollProgress" class="scroll-progress-bar"></div>
+
+    <!-- GALLERY CONTAINER -->
+    <section class="section-padding">
+      <div class="container">
+        <div class="section-header">
+          <h2 class="section-title">Moments of <span>Innovation</span></h2>
+          <p class="section-subtitle">Explore moments from our events, workshops, hackathons, and community gatherings. See the passion and innovation that drives our community forward.</p>
+        </div>
+
+        <div class="gallery-filter-container">
+          <button class="filter-btn active" data-filter="all">All Photos</button>
+          <button class="filter-btn" data-filter="hackathons">Hackathons</button>
+          <button class="filter-btn" data-filter="workshops">Workshops</button>
+          <button class="filter-btn" data-filter="speaker-sessions">Speaker Sessions</button>
+          <button class="filter-btn" data-filter="meetups">Community Meetups</button>
+          <button class="filter-btn" data-filter="team-collabs">Team Collaborations</button>
+          <button class="filter-btn" data-filter="networking">Networking Events</button>
+        </div>
+
+        <div class="gallery-grid" id="galleryGrid">
+          <!-- Item 1: Hackathon 2025 -->
+          <div class="gallery-item gradient-border-card" data-category="hackathons">
+            <div class="gallery-card-visual">
+              <img src="images/photo1.jpg" alt="Hackathon 2025" class="gallery-card-img">
+            </div>
+            <div class="gallery-card-info">
+              <span class="gallery-card-tag">Hackathons</span>
+              <h3 class="gallery-card-title">Hackathon 2025</h3>
+              <p class="gallery-card-desc">Teams competing and building innovative solutions at our flagship hackathon event.</p>
+            </div>
+          </div>
+
+          <!-- Item 2: Hackhaven -->
+          <div class="gallery-item gradient-border-card" data-category="hackathons">
+            <div class="gallery-card-visual">
+              <img src="images/photo2.jpg" alt="Hackhaven" class="gallery-card-img">
+            </div>
+            <div class="gallery-card-info">
+              <span class="gallery-card-tag">Hackathons</span>
+              <h3 class="gallery-card-title">Hackhaven</h3>
+              <p class="gallery-card-desc">Participants collaborating through the night to build functional prototypes.</p>
+            </div>
+          </div>
+
+          <!-- Item 3: Community Meetup -->
+          <div class="gallery-item gradient-border-card" data-category="meetups">
+            <div class="gallery-card-visual">
+              <img src="images/photo3.jpg" alt="Community Meetup" class="gallery-card-img">
+            </div>
+            <div class="gallery-card-info">
+              <span class="gallery-card-tag">Community Meetups</span>
+              <h3 class="gallery-card-title">Community Meetup</h3>
+              <p class="gallery-card-desc">Community members connecting and sharing ideas at our developer meetup.</p>
+            </div>
+          </div>
+
+          <!-- Item 4: Hackathon -->
+          <div class="gallery-item gradient-border-card" data-category="hackathons">
+            <div class="gallery-card-visual">
+              <img src="images/photo4.jpg" alt="Hackathon" class="gallery-card-img">
+            </div>
+            <div class="gallery-card-info">
+              <span class="gallery-card-tag">Hackathons</span>
+              <h3 class="gallery-card-title">Hackathon</h3>
+              <p class="gallery-card-desc">Intense coding sessions and problem-solving at our competitive hackathon.</p>
+            </div>
+          </div>
+
+          <!-- Item 5: Coding Session -->
+          <div class="gallery-item gradient-border-card" data-category="workshops">
+            <div class="gallery-card-visual">
+              <img src="images/photo5.jpg" alt="Coding Session" class="gallery-card-img">
+            </div>
+            <div class="gallery-card-info">
+              <span class="gallery-card-tag">Workshops</span>
+              <h3 class="gallery-card-title">Coding Session</h3>
+              <p class="gallery-card-desc">Hands-on coding workshop with industry mentors and AI tools.</p>
+            </div>
+          </div>
+
+          <!-- Item 6: Community Meetup -->
+          <div class="gallery-item gradient-border-card" data-category="meetups">
+            <div class="gallery-card-visual">
+              <img src="images/photo6.jpg" alt="Community Meetup" class="gallery-card-img">
+            </div>
+            <div class="gallery-card-info">
+              <span class="gallery-card-tag">Community Meetups</span>
+              <h3 class="gallery-card-title">Community Meetup</h3>
+              <p class="gallery-card-desc">Active collaboration circles and networking at community gathering.</p>
+            </div>
+          </div>
+
+          <!-- Item 7: Networking Event -->
+          <div class="gallery-item gradient-border-card" data-category="networking">
+            <div class="gallery-card-visual">
+              <img src="images/photo7.jpg" alt="Networking Event" class="gallery-card-img">
+            </div>
+            <div class="gallery-card-info">
+              <span class="gallery-card-tag">Networking Events</span>
+              <h3 class="gallery-card-title">Networking Event</h3>
+              <p class="gallery-card-desc">Professionals and students connecting at our networking mixer.</p>
+            </div>
+          </div>
+
+          <!-- Item 8: Tech Talk -->
+          <div class="gallery-item gradient-border-card" data-category="speaker-sessions">
+            <div class="gallery-card-visual">
+              <img src="images/photo8.jpg" alt="Tech Talk" class="gallery-card-img">
+            </div>
+            <div class="gallery-card-info">
+              <span class="gallery-card-tag">Speaker Sessions</span>
+              <h3 class="gallery-card-title">Tech Talk</h3>
+              <p class="gallery-card-desc">Industry experts sharing insights on emerging technologies.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <!-- FOOTER -->
+  <footer>
+    <a href="index.html" class="footer-logo">
+      <img src="images/favicon.png" alt="logo" class="logo-icon" style="height: 32px;">
+      TECH4HACK
+    </a>
+    <p class="footer-desc">
+      Empowering the next generation of technology leaders through community-driven learning, networking, and collaborative innovation.
+    </p>
+    <div class="footer-socials">
+      <a href="https://api.whatsapp.com/send?phone=449" target="_blank" rel="noopener" class="footer-social-link" aria-label="WhatsApp">
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor">
+          <path d="M12.004 2c-5.523 0-10 4.477-10 10 0 1.76.455 3.42 1.253 4.887l-1.332 4.862 4.98-1.306c1.424.776 3.036 1.207 4.75 1.207 5.522 0 10-4.477 10-10s-4.478-10-10-10zm.01 1.75c4.56 0 8.25 3.69 8.25 8.25s-3.69 8.25-8.25 8.25c-1.603 0-3.093-.456-4.364-1.246l-.313-.193-2.946.772.788-2.876-.214-.34c-.87-1.39-1.32-2.99-1.32-4.67 0-4.56 3.69-8.25 8.25-8.25zm-3.61 3.5c-.173.003-.342.062-.486.183-.344.29-.68.796-.68 1.488 0 .973.53 1.94 1.058 2.58.528.64 2.254 3.73 5.438 4.93.91.34 1.543.513 2.06.666.924.27 1.765.235 2.428.136.74-.112 2.257-.923 2.576-1.815.32-.89.32-1.657.224-1.818-.096-.16-.353-.257-.738-.45-.386-.192-2.256-1.11-2.61-1.238-.352-.128-.61-.192-.865.193-.256.385-.992 1.237-1.216 1.493-.224.256-.45.29-.834.097-2.022-1.01-3.522-2.316-4.73-4.407-.193-.385-.02-.594.172-.787.172-.172.385-.45.577-.674.193-.224.257-.385.385-.642.128-.256.064-.482-.032-.674-.096-.193-.865-2.086-1.185-2.857-.31-.745-.63-.64-.866-.65-.175-.008-.363-.008-.545-.008z"/>
+        </svg>
+      </a>
+      <a href="https://instagram.com/tech4hack.community" target="_blank" rel="noopener" class="footer-social-link" aria-label="Instagram">
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="2" y="2" width="20" height="20" rx="5" ry="5"></rect>
+          <path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"></path>
+          <line x1="17.5" y1="6.5" x2="17.51" y2="6.5"></line>
+        </svg>
+      </a>
+      <a href="https://www.linkedin.com/company/tech4hack/" target="_blank" rel="noopener" class="footer-social-link" aria-label="LinkedIn">
+        <svg viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path>
+          <rect x="2" y="9" width="4" height="12"></rect>
+          <circle cx="4" cy="4" r="2"></circle>
+        </svg>
+      </a>
+    </div>
+    <div class="footer-divider"></div>
+    <div class="footer-bottom">
+      <div>© 2026 Tech4Hack. Learn. Build. Grow.</div>
+      <div>Designed with Passion for Builders</div>
+    </div>
+  </footer>
+
+  <!-- LIGHTBOX MODAL -->
+  <div id="lightboxModal" class="lightbox-modal">
+    <span class="lightbox-close" id="lightboxClose">&times;</span>
+    <div class="lightbox-nav lightbox-prev" id="lightboxPrev">&#10094;</div>
+    <div class="lightbox-nav lightbox-next" id="lightboxNext">&#10095;</div>
+    
+    <!-- Top Bar Controls -->
+    <div class="lightbox-controls" style="position: absolute; top: 20px; left: 30px; display: flex; align-items: center; gap: 20px; z-index: 1002;">
+      <span id="lightboxCounter" style="font-size: 14px; font-weight: 600; color: var(--muted); font-family: 'Sora', sans-serif;">Image 1 of 1</span>
+      <button id="lightboxPlayPause" style="background: rgba(255, 255, 255, 0.1); border: 1px solid rgba(255, 255, 255, 0.2); color: white; padding: 6px 12px; border-radius: 20px; cursor: pointer; font-size: 12px; font-weight: 600; display: flex; align-items: center; gap: 6px; transition: all 0.2s; outline: none;">
+        <svg id="playIcon" viewBox="0 0 24 24" width="12" height="12" fill="currentColor" style="display: block;"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+        <svg id="pauseIcon" viewBox="0 0 24 24" width="12" height="12" fill="currentColor" style="display: none;"><rect x="6" y="4" width="4" height="16"></rect><rect x="14" y="4" width="4" height="16"></rect></svg>
+        <span>Slideshow</span>
+      </button>
+    </div>
+
+    <div class="lightbox-content-wrapper">
+      <img class="lightbox-img" id="lightboxImg" src="">
+      <div class="lightbox-caption" id="lightboxCaption"></div>
+      
+      <!-- Scrollable Thumbnail strip -->
+      <div class="lightbox-thumbnails" id="lightboxThumbnails"></div>
+    </div>
+  </div>
+
+  <!-- LOAD AUTOMATICALLY GENERATED DATA -->
+  <script src="gallery-data.js"></script>
+
+  <script src="scripts/network-graph.js"></script>
+  <script>
+    // ── Gallery: Interactive Network Graph Background ──
+    initNetworkGraph('galleryNetworkCanvas', 'heroWrapper');
+
+    // ── Mobile Nav Toggle ──
+    (function () {
+      const burger = document.getElementById('burgerMenu');
+      const navLinks = document.querySelector('.nav-links');
+      const navLinksItems = document.querySelectorAll('.nav-links a');
+      const nav = document.querySelector('nav');
+
+      if (burger && navLinks) {
+        burger.addEventListener('click', function () {
+          navLinks.classList.toggle('active');
+          if (nav) nav.classList.toggle('nav-menu-open');
+        });
+
+        navLinksItems.forEach(item => {
+          item.addEventListener('click', () => {
+            navLinks.classList.remove('active');
+            if (nav) nav.classList.remove('nav-menu-open');
+          });
+        });
+      }
+    })();
+
+    // ── Reading Scroll Progress Bar & Navbar Adaptive Background ──
+    function handleScroll() {
+      const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+      const scrollPercent = docHeight > 0 ? (window.scrollY / docHeight) * 100 : 0;
+      const progressEl = document.getElementById('scrollProgress');
+      if (progressEl) progressEl.style.width = scrollPercent + '%';
+
+      const nav = document.querySelector('nav');
+      if (nav) {
+        if (window.scrollY > 20) {
+          nav.classList.add('nav-scrolled');
+        } else {
+          nav.classList.remove('nav-scrolled');
+        }
+      }
+    }
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    handleScroll();
+
+    // ── Interactive Category Filtering & Event Cards Rendering ──
+    const galleryGrid = document.getElementById('galleryGrid');
+
+    function renderEvents(filterCategory = 'all') {
+      galleryGrid.innerHTML = '';
+      
+      if (typeof galleryEvents === 'undefined' || !galleryEvents.length) {
+        galleryGrid.innerHTML = '<div style="grid-column: 1/-1; text-align: center; color: var(--muted); padding: 40px;">No event data found. Run sync_gallery.py script.</div>';
+        return;
+      }
+      
+      galleryEvents.forEach(event => {
+        if (filterCategory === 'all' || event.category === filterCategory) {
+          const card = document.createElement('div');
+          card.className = 'gallery-item gradient-border-card';
+          card.setAttribute('data-category', event.category);
+          card.style.cursor = 'pointer';
+          
+          const categoryLabel = event.category.replace('-', ' ');
+          
+          card.innerHTML = `
+            <div class="gallery-card-visual">
+              <img src="${event.images[0]}" alt="${event.name}" class="gallery-card-img" loading="lazy">
+              <span class="gallery-photo-count-badge" style="position: absolute; top: 16px; right: 16px; background: rgba(7, 5, 16, 0.85); backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px); padding: 5px 12px; border-radius: 50px; font-size: 11px; font-weight: 700; color: #c084fc; border: 1px solid rgba(139, 34, 226, 0.3); z-index: 5; font-family: 'Sora', sans-serif; letter-spacing: 0.02em;">
+                ${event.images.length} Photos
+              </span>
+              <div class="gallery-card-glow"></div>
+            </div>
+            <div class="gallery-card-info">
+              <span class="gallery-card-tag">${categoryLabel}</span>
+              <h3 class="gallery-card-title">${event.name}</h3>
+              <p class="gallery-card-desc">${event.description}</p>
+            </div>
+          `;
+          
+          card.addEventListener('click', () => {
+            openSlideshow(event.id);
+          });
+          
+          galleryGrid.appendChild(card);
+        }
+      });
+    }
+
+    // Initialize rendering
+    renderEvents('all');
+
+    const filterBtns = document.querySelectorAll('.filter-btn');
+    filterBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        filterBtns.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        const category = btn.getAttribute('data-filter');
+        renderEvents(category);
+      });
+    });
+
+    // ── Dynamic Lightbox Slideshow ──
+    let currentEvent = null;
+    let currentImageIndex = 0;
+    let autoplayInterval = null;
+    let isPlaying = false;
+
+    const lightbox = document.getElementById('lightboxModal');
+    const lightboxImg = document.getElementById('lightboxImg');
+    const lightboxCaption = document.getElementById('lightboxCaption');
+    const closeBtn = document.getElementById('lightboxClose');
+    const prevBtn = document.getElementById('lightboxPrev');
+    const nextBtn = document.getElementById('lightboxNext');
+    const counter = document.getElementById('lightboxCounter');
+    const playPauseBtn = document.getElementById('lightboxPlayPause');
+    const playIcon = document.getElementById('playIcon');
+    const pauseIcon = document.getElementById('pauseIcon');
+    const thumbnailsContainer = document.getElementById('lightboxThumbnails');
+
+    function openSlideshow(eventId) {
+      if (typeof galleryEvents === 'undefined') return;
+      currentEvent = galleryEvents.find(e => e.id === eventId);
+      if (!currentEvent || currentEvent.images.length === 0) return;
+      
+      currentImageIndex = 0;
+      
+      renderThumbnails();
+      showImage(0);
+      
+      lightbox.classList.add('show');
+      document.body.style.overflow = 'hidden';
+    }
+
+    function renderThumbnails() {
+      thumbnailsContainer.innerHTML = '';
+      currentEvent.images.forEach((imgSrc, index) => {
+        const thumb = document.createElement('img');
+        thumb.src = imgSrc;
+        thumb.alt = `Thumbnail ${index + 1}`;
+        thumb.className = 'lightbox-thumb';
+        thumb.loading = 'lazy';
+        thumb.addEventListener('click', (e) => {
+          e.stopPropagation();
+          stopAutoplay();
+          showImage(index);
+        });
+        thumbnailsContainer.appendChild(thumb);
+      });
+    }
+
+    function showImage(index) {
+      if (!currentEvent) return;
+      
+      if (index >= currentEvent.images.length) {
+        currentImageIndex = 0;
+      } else if (index < 0) {
+        currentImageIndex = currentEvent.images.length - 1;
+      } else {
+        currentImageIndex = index;
+      }
+
+      const imageSrc = currentEvent.images[currentImageIndex];
+      lightboxImg.src = imageSrc;
+      
+      const filename = imageSrc.split('/').pop().split('_converted')[0].split('.')[0];
+      lightboxCaption.innerText = `${currentEvent.name} - ${filename}`;
+      counter.innerText = `Image ${currentImageIndex + 1} of ${currentEvent.images.length}`;
+      
+      const thumbs = thumbnailsContainer.querySelectorAll('.lightbox-thumb');
+      thumbs.forEach((t, i) => {
+        if (i === currentImageIndex) {
+          t.classList.add('active');
+          t.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
+        } else {
+          t.classList.remove('active');
+        }
+      });
+
+      // Prefetch next image
+      const nextIndex = (currentImageIndex + 1) % currentEvent.images.length;
+      const nextImg = new Image();
+      nextImg.src = currentEvent.images[nextIndex];
+    }
+
+    function closeSlideshow() {
+      stopAutoplay();
+      lightbox.classList.remove('show');
+      document.body.style.overflow = '';
+      setTimeout(() => { lightboxImg.src = ''; }, 300);
+    }
+
+    function toggleAutoplay() {
+      if (isPlaying) {
+        stopAutoplay();
+      } else {
+        startAutoplay();
+      }
+    }
+
+    function startAutoplay() {
+      isPlaying = true;
+      playIcon.style.display = 'none';
+      pauseIcon.style.display = 'block';
+      playPauseBtn.classList.add('playing');
+      
+      autoplayInterval = setInterval(() => {
+        showImage(currentImageIndex + 1);
+      }, 3000);
+    }
+
+    function stopAutoplay() {
+      isPlaying = false;
+      playIcon.style.display = 'block';
+      pauseIcon.style.display = 'none';
+      playPauseBtn.classList.remove('playing');
+      
+      if (autoplayInterval) {
+        clearInterval(autoplayInterval);
+        autoplayInterval = null;
+      }
+    }
+
+    closeBtn.addEventListener('click', closeSlideshow);
+
+    prevBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      stopAutoplay();
+      showImage(currentImageIndex - 1);
+    });
+
+    nextBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      stopAutoplay();
+      showImage(currentImageIndex + 1);
+    });
+
+    playPauseBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      toggleAutoplay();
+    });
+
+    lightbox.addEventListener('click', (e) => {
+      if (e.target === lightbox || e.target.classList.contains('lightbox-content-wrapper')) {
+        closeSlideshow();
+      }
+    });
+
+    document.addEventListener('keydown', (e) => {
+      if (!lightbox.classList.contains('show')) return;
+      
+      if (e.key === 'Escape') closeSlideshow();
+      else if (e.key === 'ArrowLeft') {
+        stopAutoplay();
+        showImage(currentImageIndex - 1);
+      } else if (e.key === 'ArrowRight') {
+        stopAutoplay();
+        showImage(currentImageIndex + 1);
+      } else if (e.key === ' ') {
+        e.preventDefault();
+        toggleAutoplay();
+      }
+    });
+
+    // ── Touch Swipe Navigation for Lightbox ──
+    (function () {
+      let touchstartX = 0;
+      let touchendX = 0;
+
+      function checkDirection() {
+        const swipeThreshold = 50; // min distance in px
+        if (touchendX < touchstartX - swipeThreshold) {
+          // swiped left -> next image
+          stopAutoplay();
+          showImage(currentImageIndex + 1);
+        }
+        if (touchendX > touchstartX + swipeThreshold) {
+          // swiped right -> prev image
+          stopAutoplay();
+          showImage(currentImageIndex - 1);
+        }
+      }
+
+      lightbox.addEventListener('touchstart', e => {
+        touchstartX = e.changedTouches[0].screenX;
+      }, { passive: true });
+
+      lightbox.addEventListener('touchend', e => {
+        touchendX = e.changedTouches[0].screenX;
+        checkDirection();
+      }, { passive: true });
+    })();
+  </script>
+
+</body>
+
+</html>
